@@ -122,8 +122,13 @@ class Setup {
 					'aliases' => 'branchname',
 					'message' => 'github-par-branchname',
 				),
+				'lang' => array(
+					'default' => 'auto',
+					'aliases' => 'language',
+					'message' => 'github-par-language',
+				),
 			),
-			array( 'file', 'repo', 'branch' )
+			array( 'file', 'repo', 'branch', 'lang' )
 		);
 	}
 

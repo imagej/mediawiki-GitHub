@@ -21,6 +21,7 @@ class GitHubParserHook implements HookHandler {
 	private $fileName;
 	private $repoName;
 	private $branchName;
+	private $lang;
 
 	/**
 	 * @param FileFetcher $fileFetcher
@@ -43,6 +44,7 @@ class GitHubParserHook implements HookHandler {
 		$this->fileName = $params['file']->getValue();
 		$this->repoName = $params['repo']->getValue();
 		$this->branchName = $params['branch']->getValue();
+		$this->lang = $params['lang']->getValue();
 	}
 
 	private function getRenderedContent( Parser $parser ) {
@@ -80,6 +82,7 @@ class GitHubParserHook implements HookHandler {
 	}
 
 	private function getLang() {
+		if ( strcmp($this->lang, 'auto') != 0 ) return $this->lang;
 		// auto-detect by file extension
 		$fileExt = pathinfo($this->fileName, PATHINFO_EXTENSION);
 		switch ($fileExt) {
