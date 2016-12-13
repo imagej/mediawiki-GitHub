@@ -50,6 +50,11 @@ class GitHubParserHook implements HookHandler {
 	private function getRenderedContent( Parser $parser ) {
 		$content = $this->getFileContent();
 
+		// strip license header
+		// NB: Yes, it's hacky. Tell me you have a better idea!
+		$pattern = '/.*#L%[^\n]*\n[^\n]*\n*/s';
+		$content = preg_replace( $pattern, '', $content );
+
 		if ( $this->isMarkdownFile() ) {
 			$content = $this->renderAsMarkdown( $content );
 		}
