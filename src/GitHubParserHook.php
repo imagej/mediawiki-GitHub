@@ -52,7 +52,8 @@ class GitHubParserHook implements HookHandler {
 			$content = $this->renderAsMarkdown( $content );
 		}
 		else {
-			$content = "<source>$content</source>";
+			$lang = $this->getLang();
+			$content = "<source lang=\"$lang\">$content</source>";
 			$content = $parser->recursiveTagParse( $content, null );
 		}
 
@@ -76,6 +77,19 @@ class GitHubParserHook implements HookHandler {
 			$this->branchName,
 			$this->fileName
 		);
+	}
+
+	private function getLang() {
+		// auto-detect by file extension
+		$fileExt = pathinfo($this->fileName, PATHINFO_EXTENSION);
+		switch ($fileExt) {
+		case "py":
+			return "python";
+			break;
+		default:
+			// use extension as-is
+			return $fileExt;
+		}
 	}
 
 	private function isMarkdownFile() {
