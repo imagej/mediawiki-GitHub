@@ -34,7 +34,7 @@ class GitHubParserHook implements HookHandler {
 	public function handle( Parser $parser, ProcessingResult $result ) {
 		$this->setFields( $result );
 
-		return $this->getRenderedContent();
+		return $this->getRenderedContent($parser);
 	}
 
 	private function setFields( ProcessingResult $result ) {
@@ -45,11 +45,15 @@ class GitHubParserHook implements HookHandler {
 		$this->branchName = $params['branch']->getValue();
 	}
 
-	private function getRenderedContent() {
+	private function getRenderedContent( Parser $parser ) {
 		$content = $this->getFileContent();
 
 		if ( $this->isMarkdownFile() ) {
 			$content = $this->renderAsMarkdown( $content );
+		}
+		else {
+			$content = "<source>$content</source>";
+			$content = $parser->recursiveTagParse( $content, null );
 		}
 
 		return $content;
